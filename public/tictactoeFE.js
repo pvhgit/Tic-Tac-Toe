@@ -1,4 +1,4 @@
-// ---- Tic tac toe gane for CMG ------
+// ---- Tic tac toe game for CMG ------
 // ---- Author: Prashant Hedaoo
 // ---- client code
 
@@ -20,4 +20,7 @@ window.onload = function() {
             console.log("There is a problem:", data);
         }
     });
+
+    // test msg out
+    socket.emit('send', { 'message' : 'Hi there! msg from Front end' } );
 }
