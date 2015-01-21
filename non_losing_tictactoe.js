@@ -47,8 +47,8 @@ function non_losing_tictactoe_engine(game_board) {
 						}
 					}
 				}
-				else 
-					next_move_idx = 4; // get center cell
+				else
+					next_move_idx = board[4] ? 2 : 4; // get center cell in not taken
 
 				if (next_move_idx === -1) // get first empty
 					next_move_idx = getFirstEmpty(board);
@@ -56,10 +56,10 @@ function non_losing_tictactoe_engine(game_board) {
 			break;
 
 		default:
-			// console.log('Turn >= 5');
+			console.log('Turn >= 5');
 			next_move_idx = blockOpponent(board); // return -1 if no block needed; index otherwise
 			if (next_move_idx === -1) {  // Decide next move
-				// console.log('Non block turn');
+				console.log('Non block turn');
 				if (board[0]+board[2]+board[6]+board[8] === 0)
 					next_move_idx = board[0] || board[8] ? 2 : 0;
 			}
@@ -69,6 +69,9 @@ function non_losing_tictactoe_engine(game_board) {
 				next_move_idx = getFirstEmpty(board);
 	}
 
+	if (board[next_move_idx])
+		console.log("ERROR in logic! Attempt to over-write selected cell.");
+	
 	board[next_move_idx] = -1; // this is next move for AI
 
 	return serializeBoard(board);
@@ -106,7 +109,7 @@ function blockOpponent(board) {
 	if (idx === -1 && board[2] + board[4] + board[6] === 2)
 		idx = board[2] ^ board[4] ? (board[2] ? 4 : 2 ) : 6;
 
-	// console.log('Block = ' + idx);
+	console.log('Block = ' + idx);
 	return idx;
 }
 
