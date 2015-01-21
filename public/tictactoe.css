@@ -1,0 +1,24 @@
+#game_layout {
+    border: 5px solid #00aaff;
+    clear: both;
+    float: left;
+}
+
+#game_layout .cell {
+    border: 1px solid #000;
+    cursor: pointer;
+    float: left;
+    font-size: 30px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    width: 50px;
+}
+.clear {
+    clear: both;
+    line-height: 0;
+}
+
+#game_layout .hover {
+    background: none repeat scroll 0 0 #dfe1e3;
+}
