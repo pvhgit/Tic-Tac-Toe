@@ -1,0 +1,11 @@
+{
+    "name": "Prashant_Tic_Tac_Toe",
+    "version": "0.0.0",
+    "description": "Prashant Tic-Tac-Toe in NodeJS and jQuery for CMG",
+    "dependencies": {
+        "socket.io": "latest",
+        "express": "latest",
+        "jade": "latest"
+    },
+    "author": "Prashant Hedaoo"
+}
