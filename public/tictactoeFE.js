@@ -37,9 +37,7 @@ window.onload = function() {
             }
             logg( null, data.msg );
             $("#status").css('color','yellow').css('background-color','black')
-                .removeClass('blink_text')
                 .html('<br>' + data.msg);
-            clearInterval(blinker_id); // stop blinking text
         }
         disableBoard();
     });
@@ -47,20 +45,22 @@ window.onload = function() {
     // Start the game and initialize the page
     renderBoard(null);
     blinker_id = setInterval(blinker, 500); // start blinking text loop
-    $("#status").css('color','blue').addClass('blink_text')
-        .html("Welcome!<br> Let's play. Your turn...");
  }
 
 function renderBoard(board_data) {
     board = {};
-    if (board_data)
+    if (board_data) {
         deSerializeBoard(board_data);
-    else // set all cells as empty
+        $("#status").css('color','black').html("<br>Your turn....");
+    }
+    else { // set all cells as empty
         for( var n=0; n < positions.length; ++n)
             board[positions[n]] = 'E';
+        $("#status").show().css('color','blue').addClass('blink_text')
+            .html("Welcome!<br> Let's play. Your turn...");
+    }
 
     drawCells();
-    $("#status").css('color','black').html("<br>Your turn....");
 
     if (!debug)
        $("#content").hide(); // debug activity messages
@@ -84,6 +84,13 @@ function drawCells() {
     // activate clicks and hover for all empty cells
     $("#game_layout .on").bind('mouseover', hoverCell).bind('mouseout', leaveCell)
         .bind("click", processClick);
+    $("#reset").bind("click", reset);
+}
+
+function reset() {
+    disableBoard();
+    $("#status").hide().css('color','black').css('background-color','white');
+    renderBoard(null);
 }
 
 function disableBoard() {

@@ -8,7 +8,7 @@ Clone URL: https://github.com/pvhgit/Tic-Tac-Toe.git
 3. Run "# npm install" in the directory to install dependent modules listed in package.json file.
 4. Run "# node phTicServer.js"
 5. In browser on the same machine open URL: "http://127.0.0.1:3700"
-6. Reload the browser to start new game.
+6. Press Reset button to start new game.
 
 
 ----------------------------------------------------------------------
