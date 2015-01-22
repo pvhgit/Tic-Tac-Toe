@@ -13,7 +13,7 @@ module.exports = non_losing_tictactoe_engine;  // export module
 function non_losing_tictactoe_engine(game_board) {
 	var board = deSerializeBoard(game_board);
 	var x=0, o=0, X=[], O=[], next_move_idx = -1;
-	 // Mark X = 1; O = -1 & E = 0 to detect blocking moves in blockOpponent() function
+	 // Mark X = 1; O = -1 & E = 0 to detect blocking moves in block_or_win() function
 	 // if sum of row, column & diagonals is 2 then it must be blocked
 	for (var b=0; b < board.length; ++b)
 		if (board[b] === 'X')
@@ -34,7 +34,7 @@ function non_losing_tictactoe_engine(game_board) {
 
 		case 2:
 			// console.log('Turn 3');
-			next_move_idx = blockOpponent(board); // return -1 if no block needed; index otherwise
+			next_move_idx = block_or_win(board, 1); // return -1 if no block needed; index otherwise
 			if (next_move_idx === -1) {  // Decide next move
 				// console.log('Non block turn');
 				if (O[0] === 4) { // AI has center marked
@@ -56,13 +56,14 @@ function non_losing_tictactoe_engine(game_board) {
 			break;
 
 		default:
-			console.log('Turn >= 5');
-			next_move_idx = blockOpponent(board); // return -1 if no block needed; index otherwise
-			if (next_move_idx === -1) {  // Decide next move
-				console.log('Non block turn');
-				if (board[0]+board[2]+board[6]+board[8] === 0)
+			// console.log('Turn >= 5  - ' + x);
+			next_move_idx = block_or_win(board, -1); // Check is winning move
+			if (next_move_idx === -1)
+				next_move_idx = block_or_win(board, 1); // Check if need to block
+			if (next_move_idx === -1 && x===3 && X[0]+X[1]+X[2] === 12)
+				next_move_idx = board[0] ? 8 : board[2] ? 6 : board[6] ? 2 : 0;
+			if (next_move_idx === -1 && board[0]+board[2]+board[6]+board[8] === 0)
 					next_move_idx = board[0] || board[8] ? 2 : 0;
-			}
 			if (board[next_move_idx]) // already taken
 				next_move_idx = -1;
 			if (next_move_idx === -1) // get first empty
@@ -71,7 +72,7 @@ function non_losing_tictactoe_engine(game_board) {
 
 	if (board[next_move_idx])
 		console.log("ERROR in logic! Attempt to over-write selected cell.");
-	
+
 	board[next_move_idx] = -1; // this is next move for AI
 
 	return serializeBoard(board);
@@ -86,30 +87,30 @@ function getFirstEmpty(board) {
 }
 
 // ----- Check if we meed to block opponents move
-function blockOpponent(board) {
+function block_or_win(board, play) {
 	var idx = -1;
 	// Check rows
 	for(var n=0; n<3; ++n) {
-		if (board[n*3] + board[n*3+1] + board[n*3+2] === 2) {
+		if (board[n*3] + board[n*3+1] + board[n*3+2] === 2*play) {
 			idx = board[n*3] ^ board[n*3+1] ? (board[n*3] ? n*3+1 : n*3 ) : n*3+2;
 			break;
 		}
 	}
 	// Check columns
 	for(var n=0; idx === -1 && n<3; ++n) {
-		if (board[n] + board[n+3] + board[n+6] === 2) {
+		if (board[n] + board[n+3] + board[n+6] === 2*play) {
 			idx = board[n] ^ board[n+3] ? (board[n] ? n+3 : n ) : n+6;
 			break;
 		}
 	}
 	// Diagonals
-	if (idx === -1 && board[0] + board[4] + board[8] === 2)
+	if (idx === -1 && board[0] + board[4] + board[8] === 2*play)
 		idx = board[0] ^ board[4] ? (board[0] ? 4 : 0 ) : 8;
 
-	if (idx === -1 && board[2] + board[4] + board[6] === 2)
+	if (idx === -1 && board[2] + board[4] + board[6] === 2*play)
 		idx = board[2] ^ board[4] ? (board[2] ? 4 : 2 ) : 6;
 
-	console.log('Block = ' + idx);
+	if (idx !== -1) console.log((play===1 ? 'Block' : 'AI win') + ' move = ' + idx);
 	return idx;
 }
 
